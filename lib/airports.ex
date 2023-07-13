@@ -3,16 +3,12 @@ defmodule Airports do
   Documentation for `Airports`.
   """
 
+  alias NimbleCSV.RFC4180, as: CSV
+
   @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Airports.hello()
-      :world
-
+  Returns full path of airports csv file.
   """
-  def hello do
-    :world
+  def airports_csv() do
+    Application.app_dir(:airports, "/priv/airports.csv")
   end
 end
