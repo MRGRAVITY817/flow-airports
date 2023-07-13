@@ -49,4 +49,26 @@ defmodule Airports do
     |> Stream.reject(&(&1.type == "closed"))
     |> Enum.to_list()
   end
+
+  @doc """
+  Read airports with Flow
+  """
+  def flow_airports() do
+    airports_csv()
+    |> File.stream!()
+    # |> CSV.parse_stream() <- we don't need this since flow is based on a single data source
+    |> Flow.from_enumerable()
+    |> Flow.map(fn row ->
+      [row] = CSV.parse_string(row, skip_headers: false)
+
+      %{
+        id: Enum.at(row, 0),
+        type: Enum.at(row, 2),
+        name: Enum.at(row, 3),
+        country: Enum.at(row, 8)
+      }
+    end)
+    |> Flow.reject(&(&1.type == "closed"))
+    |> Enum.to_list()
+  end
 end
