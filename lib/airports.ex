@@ -73,6 +73,8 @@ defmodule Airports do
     |> Flow.reduce(fn -> %{} end, fn item, acc ->
       Map.update(acc, item.country, 1, &(&1 + 1))
     end)
+    |> Flow.take_sort(10, fn {_, a}, {_, b} -> a > b end)
     |> Enum.to_list()
+    |> List.flatten()
   end
 end
